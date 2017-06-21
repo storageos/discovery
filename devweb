@@ -1,0 +1,3 @@
+#!/bin/sh -e
+
+PATH="${PATH}:${PWD}" devweb --addr=":8087" github.com/storageos/discovery.etcd.io/dev

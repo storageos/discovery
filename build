@@ -1,0 +1,3 @@
+#!/bin/sh -e
+
+go build -o bin/discovery github.com/storageos/discovery.etcd.io
