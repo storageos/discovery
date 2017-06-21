@@ -13,7 +13,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/storageos/discovery.etcd.io/handlers/httperror"
+	"github.com/storageos/discovery/handlers/httperror"
 	"github.com/coreos/etcd/client"
 	"github.com/prometheus/client_golang/prometheus"
 	"golang.org/x/net/context"

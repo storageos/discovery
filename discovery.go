@@ -12,7 +12,7 @@ import (
 
 	"github.com/coreos/go-systemd/activation"
 
-	handling "github.com/storageos/discovery.etcd.io/http"
+	handling "github.com/storageos/discovery/http"
 )
 
 func fail(err string) {
@@ -52,7 +52,7 @@ func init() {
 	viper.AutomaticEnv()
 
 	pflag.StringP("etcd", "e", "http://127.0.0.1:2379", "etcd endpoint location")
-	pflag.StringP("host", "h", "https://discovery.etcd.io", "discovery url prefix")
+	pflag.StringP("host", "h", "https://discovery", "discovery url prefix")
 	pflag.StringP("addr", "a", ":8087", "web service address")
 
 	viper.BindPFlag("etcd", pflag.Lookup("etcd"))

@@ -5,7 +5,7 @@ imports:
   version: 4827e50a7ee8127a95359572cec4ddad13ec2e75
   subpackages:
   - quantile
-- name: github.com/storageos/discovery.etcd.io
+- name: github.com/storageos/discovery
   version: 4827e50a7ee8127a95359572cec4ddad13ec2e75
   subpackages:
   - http

@@ -6,7 +6,7 @@ import (
 
 	gorillaHandlers "github.com/gorilla/handlers"
 
-	"github.com/storageos/discovery.etcd.io/handlers"
+	"github.com/storageos/discovery/handlers"
 	"github.com/prometheus/client_golang/prometheus"
 
 	"github.com/gorilla/mux"

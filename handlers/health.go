@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/storageos/discovery.etcd.io/handlers/httperror"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/storageos/discovery/handlers/httperror"
 )
 
 var healthCounter *prometheus.CounterVec

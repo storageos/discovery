@@ -1,6 +1,6 @@
-# discovery.etcd.io
+# discovery
 
-This code powers the public service at https://discovery.etcd.io. The API is
+This code powers the public service at https://discovery. The API is
 documented in the [etcd clustering documentation](https://github.com/coreos/etcd/blob/master/Documentation/dev-internal/discovery_protocol.md#public-discovery-service).
 
 # Configuration
@@ -17,13 +17,13 @@ runtime arguments or environment variables.
 You may run the service in a docker container:
 
 ```
-docker pull quay.io/coreos/discovery.etcd.io
-docker run -d -p 80:8087 -e DISC_ETCD=http://etcd.example.com:2379 -e DISC_HOST=http://discovery.example.com quay.io/coreos/discovery.etcd.io
+docker pull quay.io/coreos/discovery
+docker run -d -p 80:8087 -e DISC_ETCD=http://etcd.example.com:2379 -e DISC_HOST=http://discovery.example.com quay.io/coreos/discovery
 ```
 
 ## Development
 
-discovery.etcd.io uses devweb for easy development. It is simple to get started:
+discovery uses devweb for easy development. It is simple to get started:
 
 ```
 ./devweb
