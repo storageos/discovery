@@ -1,0 +1,41 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:   
+  name: discovery
+  namespace: default
+  labels: 
+      name: "discovery"
+      keel.observer/policy: all
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: discovery
+      labels:
+        app: discovery
+    spec:
+      containers:                    
+        - image: storageos/discovery:0.1.0
+          imagePullPolicy: Always          
+          name: discovery
+          command: ["/bin/discovery"]
+          ports:
+            - containerPort: 8081       
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
+          volumeMounts:          
+          - name: cluster-db
+            mountPath: /db
+      # [START volumes]
+      volumes:        
+        - name: cluster-db
+          gcePersistentDisk:
+            # This disk must already exist. Check Readme
+            pdName: cluster-db
+            fsType: ext4        
+      # [END volumes]                  
