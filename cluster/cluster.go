@@ -14,7 +14,7 @@ import (
 // Manager - cluster manager
 type Manager interface {
 	// create new cluster
-	Create(opts *types.ClusterCreateOps) (*types.Cluster, error)
+	Create(opts types.ClusterCreateOps) (*types.Cluster, error)
 
 	// get cluster by ID
 	Get(ref string) (*types.Cluster, error)
