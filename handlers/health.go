@@ -6,7 +6,9 @@ import (
 	"net/http"
 
 	"github.com/prometheus/client_golang/prometheus"
+
 	"github.com/storageos/discovery/handlers/httperror"
+	"github.com/storageos/discovery/types"
 )
 
 var healthCounter *prometheus.CounterVec
@@ -22,19 +24,19 @@ func init() {
 	prometheus.MustRegister(healthCounter)
 }
 
-func HealthHandler(w http.ResponseWriter, r *http.Request) {
-	token, err := setupToken(0)
+func (s *Server) healthHandler(w http.ResponseWriter, r *http.Request) {
+	cluster, err := s.clusterManager.Create(types.ClusterCreateOps{})
 
-	if err != nil || token == "" {
-		log.Printf("health failed to setupToken %v", err)
-		httperror.Error(w, r, "health failed to setupToken", 400, healthCounter)
+	if err != nil {
+		log.Printf("health failed to create cluster %v", err)
+		httperror.Error(w, r, "health failed to create cluster", 400, healthCounter)
 		return
 	}
 
-	err = deleteToken(token)
+	err = s.clusterManager.Delete(cluster.ID)
 	if err != nil {
-		log.Printf("health failed to deleteToken %v", err)
-		httperror.Error(w, r, "health failed to deleteToken", 400, healthCounter)
+		log.Printf("health failed to delete cluster %v", err)
+		httperror.Error(w, r, "health failed to delete cluster", 400, healthCounter)
 		return
 	}
 
