@@ -5,6 +5,6 @@ import (
 	"net/http"
 )
 
-func RobotsHandler(w http.ResponseWriter, r *http.Request) {
+func robotsHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "User-agent: *\nDisallow: /")
 }
