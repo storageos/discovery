@@ -10,7 +10,6 @@ import (
 	gorillaHandlers "github.com/gorilla/handlers"
 
 	"github.com/prometheus/client_golang/prometheus"
-	// "github.com/storageos/discovery/store"
 	"github.com/storageos/discovery/cluster"
 
 	"github.com/gorilla/mux"

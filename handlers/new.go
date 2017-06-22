@@ -53,7 +53,7 @@ func (s *Server) newClusterHandler(w http.ResponseWriter, r *http.Request) {
 		httperror.Error(w, r, err.Error(), http.StatusInternalServerError, newCounter)
 		return
 	}
-
+	w.WriteHeader(http.StatusCreated)
 	w.Write(bts)
-	newCounter.WithLabelValues("200", r.Method).Add(1)
+	newCounter.WithLabelValues(strconv.Itoa(http.StatusCreated), r.Method).Add(1)
 }
