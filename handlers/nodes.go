@@ -9,7 +9,6 @@ import (
 	"github.com/storageos/discovery/types"
 
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/storageos/discovery/pkg/lockstring"
 )
 
 func init() {
@@ -24,8 +23,7 @@ func init() {
 }
 
 var (
-	currentLeader lockstring.LockString
-	tokenCounter  *prometheus.CounterVec
+	tokenCounter *prometheus.CounterVec
 )
 
 func (s *Server) clusterHandler(w http.ResponseWriter, r *http.Request) {
@@ -49,7 +47,7 @@ func (s *Server) registerNodeHandler(w http.ResponseWriter, r *http.Request) {
 	clusterID := getParam(paramCluster, r)
 
 	var node types.Node
-	if err := json.NewDecoder(r.Body).Decode(node); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&node); err != nil {
 		httperror.Error(w, r, err.Error(), http.StatusInternalServerError, newCounter)
 		return
 	}
