@@ -1,0 +1,39 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata: 
+  annotations:
+    kubernetes.io/service-account.name: keel
+  name: keel
+  namespace: kube-system
+  labels: 
+      name: "keel"
+      keel.observer/policy: all
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: keel
+      labels:
+        app: keel      
+    spec:
+      containers:                    
+        - image: karolisr/keel:0.2.1
+          imagePullPolicy: Always
+          env:                         
+            - name: PUBSUB
+              value: "1"
+            - name: PROJECT_ID
+              value: "storageos-public-service"
+          name: keel
+          command: ["/bin/keel"]
+          ports:
+            - containerPort: 9300       
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 9300
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
+          securityContext:
+            privileged: true       

@@ -16,16 +16,19 @@ spec:
         app: discovery
     spec:
       containers:                    
-        - image: storageos/discovery:0.1.0
-          imagePullPolicy: Always          
+        - image: gcr.io/storageos-public-service/discovery:0.1.4
+          imagePullPolicy: Always 
           name: discovery
           command: ["/bin/discovery"]
           ports:
-            - containerPort: 8081       
+            - containerPort: 80
+          env:                         
+            - name: PORT
+              value: "80"  
           livenessProbe:
             httpGet:
               path: /health
-              port: 8081
+              port: 80
             initialDelaySeconds: 30
             timeoutSeconds: 10
           volumeMounts:          
