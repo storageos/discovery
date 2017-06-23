@@ -26,12 +26,14 @@ type Manager interface {
 	Delete(id string) error
 }
 
+// DefaultManager - default cluster manager
 type DefaultManager struct {
 	mu         *sync.Mutex
 	store      store.Store
 	serializer codecs.Serializer
 }
 
+// New - create new cluster manager
 func New(store store.Store, serializer codecs.Serializer) *DefaultManager {
 	return &DefaultManager{
 		mu:         &sync.Mutex{},
@@ -40,6 +42,7 @@ func New(store store.Store, serializer codecs.Serializer) *DefaultManager {
 	}
 }
 
+// Create - create new cluster
 func (m *DefaultManager) Create(opts types.ClusterCreateOps) (*types.Cluster, error) {
 	cluster := types.Cluster{
 		ID:        uuid.Generate(),
@@ -67,6 +70,7 @@ func (m *DefaultManager) Create(opts types.ClusterCreateOps) (*types.Cluster, er
 	return &cluster, nil
 }
 
+// Get - get cluster by ID
 func (m *DefaultManager) Get(ref string) (*types.Cluster, error) {
 	kvp, err := m.store.Get(ref)
 	if err != nil {
@@ -77,6 +81,7 @@ func (m *DefaultManager) Get(ref string) (*types.Cluster, error) {
 	return &cluster, err
 }
 
+// RegisterNode - register new node to the cluster
 func (m *DefaultManager) RegisterNode(clusterID string, node *types.Node) (updated *types.Cluster, err error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
@@ -101,6 +106,9 @@ func (m *DefaultManager) RegisterNode(clusterID string, node *types.Node) (updat
 		}
 	}
 
+	node.CreatedAt = time.Now()
+	node.UpdatedAt = time.Now()
+
 	cluster.Nodes = append(cluster.Nodes, node)
 
 	bts, err := m.serializer.Encode(cluster)
@@ -116,6 +124,7 @@ func (m *DefaultManager) RegisterNode(clusterID string, node *types.Node) (updat
 	return cluster, nil
 }
 
+// Update - update cluster
 func (m *DefaultManager) Update(cluster *types.Cluster) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
@@ -130,6 +139,7 @@ func (m *DefaultManager) Update(cluster *types.Cluster) error {
 	return err
 }
 
+// Delete - delete cluster by ID
 func (m *DefaultManager) Delete(id string) error {
 	return m.store.Delete(id)
 }

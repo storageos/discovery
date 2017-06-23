@@ -1,0 +1,9 @@
+steps:
+- name: gcr.io/cloud-builders/docker 
+  args: ["build", "--tag", "discovery-build", "-f", "Dockerfile.build", "."]  
+- name: discovery-build
+  args: ["cp", "/go/src/github.com/storageos/discovery/discovery", "/workspace"]
+- name: gcr.io/cloud-builders/docker
+  args: ["build", "--tag", "gcr.io/storageos-public-service/discovery:$TAG_NAME", "."]
+
+images: ['gcr.io/storageos-public-service/discovery:$TAG_NAME']
