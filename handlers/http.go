@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -45,6 +46,12 @@ func (s *Server) Start() error {
 	}
 	log.Printf("server starting on port %d", s.port)
 	return s.server.ListenAndServe()
+}
+
+func (s *Server) Stop() {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(5))
+	defer cancel()
+	s.server.Shutdown(ctx)
 }
 
 func getParam(param string, req *http.Request) string {
