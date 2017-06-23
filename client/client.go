@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 
 	"github.com/storageos/discovery/types"
 )
@@ -63,6 +64,42 @@ func (c *DefaultClient) ClusterGet(ref string) (*types.Cluster, error) {
 	return &cluster, nil
 }
 
+// ClusterCreate - create cluster
+func (c *DefaultClient) ClusterCreate(opts types.ClusterCreateOps) (*types.Cluster, error) {
+
+	path := c.endpoint + "/clusters"
+	vals := url.Values{}
+	vals.Set("size", fmt.Sprintf("%d", opts.Size))
+	vals.Set("name", fmt.Sprintf("%s", opts.Name))
+	path = fmt.Sprintf("%s?%s", path, vals.Encode())
+
+	req, err := http.NewRequest("POST", path, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusCreated {
+		respMsg, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return nil, fmt.Errorf("unexpected status code: %d, response body unavailable", resp.StatusCode)
+		}
+		return nil, fmt.Errorf("unexpected status code: %d (%s)", resp.StatusCode, string(respMsg))
+	}
+
+	var cluster types.Cluster
+	if err := json.NewDecoder(resp.Body).Decode(&cluster); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal response from discovery service: %s", err)
+	}
+
+	return &cluster, nil
+}
+
 // ClusterRegisterNode - register node to cluster
 func (c *DefaultClient) ClusterRegisterNode(clusterID, nodeID, name, advertiseIP string) (*types.Cluster, error) {
 	node := types.Node{
@@ -84,9 +121,14 @@ func (c *DefaultClient) ClusterRegisterNode(clusterID, nodeID, name, advertiseIP
 	if err != nil {
 		return nil, err
 	}
+	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+		respMsg, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return nil, fmt.Errorf("unexpected status code: %d, response body unavailable", resp.StatusCode)
+		}
+		return nil, fmt.Errorf("unexpected status code: %d (%s)", resp.StatusCode, string(respMsg))
 	}
 
 	var cluster types.Cluster
