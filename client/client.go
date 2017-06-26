@@ -12,7 +12,7 @@ import (
 )
 
 // DefaultEndpoint - default endpoint address
-const DefaultEndpoint = "http://35.189.234.67"
+const DefaultEndpoint = "http://discovery.storageos.cloud"
 
 // Client - generic client interface
 type Client interface {
