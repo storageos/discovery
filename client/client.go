@@ -52,7 +52,7 @@ func (c *DefaultClient) ClusterGet(ref string) (*types.Cluster, error) {
 		return nil, err
 	}
 
-	if resp.StatusCode != http.StatusCreated {
+	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 	}
 
