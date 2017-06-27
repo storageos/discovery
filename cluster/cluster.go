@@ -92,7 +92,7 @@ func (m *DefaultManager) RegisterNode(clusterID string, node *types.Node) (updat
 
 	// looking for duplicates
 	for _, n := range cluster.Nodes {
-		if n.Name == node.Name && n.AdvertiseIP == node.AdvertiseIP && n.ID == node.ID {
+		if n.Name == node.Name && n.AdvertiseAddress == node.AdvertiseAddress && n.ID == node.ID {
 			// node already registered, nothing to do
 			return cluster, nil
 		}
@@ -101,8 +101,8 @@ func (m *DefaultManager) RegisterNode(clusterID string, node *types.Node) (updat
 			return nil, fmt.Errorf("node with name %s already exists in cluster %s", node.Name, clusterID)
 		}
 
-		if n.AdvertiseIP == node.AdvertiseIP {
-			return nil, fmt.Errorf("node with advertise IP %s already exists in cluster %s", node.AdvertiseIP, clusterID)
+		if n.AdvertiseAddress == node.AdvertiseAddress {
+			return nil, fmt.Errorf("node with advertise addressP %s already exists in cluster %s", node.AdvertiseAddress, clusterID)
 		}
 	}
 

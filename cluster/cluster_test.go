@@ -57,9 +57,9 @@ func TestClusterRegisterNode(t *testing.T) {
 	}
 
 	node := &types.Node{
-		ID:          "controller-uuid-1",
-		Name:        "node-1",
-		AdvertiseIP: "10.0.1.4",
+		ID:               "controller-uuid-1",
+		Name:             "node-1",
+		AdvertiseAddress: "10.0.1.4",
 	}
 
 	updatedCluster, err := cm.RegisterNode(cluster.ID, node)
@@ -93,9 +93,9 @@ func TestClusterRegisterNodes(t *testing.T) {
 
 	for i := 0; i < 10; i++ {
 		node := &types.Node{
-			ID:          "controller-uuid-1",
-			Name:        fmt.Sprintf("node-%d", i),
-			AdvertiseIP: fmt.Sprintf("10.0.1.%d", i),
+			ID:               "controller-uuid-1",
+			Name:             fmt.Sprintf("node-%d", i),
+			AdvertiseAddress: fmt.Sprintf("10.0.1.%d", i),
 		}
 
 		_, err := cm.RegisterNode(cluster.ID, node)
