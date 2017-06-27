@@ -66,7 +66,8 @@ const (
 func (s *Server) registerHandlers() {
 	r := mux.NewRouter()
 
-	r.HandleFunc("/", HomeHandler)
+	r.HandleFunc("/", homeHandler)
+	r.HandleFunc("/version", versionHandler)
 	r.HandleFunc("/health", s.healthHandler)
 	r.HandleFunc("/robots.txt", robotsHandler)
 

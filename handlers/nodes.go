@@ -14,8 +14,8 @@ import (
 func init() {
 	tokenCounter = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
-			Name: "endpoint_token_requests_total",
-			Help: "How many /token requests processed, partitioned by status code and HTTP method.",
+			Name: "endpoint_cluster_requests_total",
+			Help: "How many /cluster requests processed, partitioned by status code and HTTP method.",
 		},
 		[]string{"code", "method"},
 	)
@@ -39,6 +39,7 @@ func (s *Server) clusterHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.Header().Set("Content-Type", "application/json")
 	w.Write(bts)
 	tokenCounter.WithLabelValues(strconv.Itoa(http.StatusOK), r.Method).Add(1)
 }
@@ -64,6 +65,7 @@ func (s *Server) registerNodeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.Header().Set("Content-Type", "application/json")
 	w.Write(bts)
 	newCounter.WithLabelValues("200", r.Method).Add(1)
 
