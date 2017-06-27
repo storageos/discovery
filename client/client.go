@@ -101,11 +101,11 @@ func (c *DefaultClient) ClusterCreate(opts types.ClusterCreateOps) (*types.Clust
 }
 
 // ClusterRegisterNode - register node to cluster
-func (c *DefaultClient) ClusterRegisterNode(clusterID, nodeID, name, advertiseIP string) (*types.Cluster, error) {
+func (c *DefaultClient) ClusterRegisterNode(clusterID, nodeID, name, advertiseAddress string) (*types.Cluster, error) {
 	node := types.Node{
-		ID:          nodeID,
-		Name:        name,
-		AdvertiseIP: advertiseIP,
+		ID:               nodeID,
+		Name:             name,
+		AdvertiseAddress: advertiseAddress,
 	}
 	reqBody, err := json.Marshal(&node)
 	if err != nil {

@@ -67,7 +67,7 @@ func TestClientRegister(t *testing.T) {
 		t.Fatalf("cannot find node in the cluster nodes")
 	}
 
-	if cluster.Nodes[0].AdvertiseIP != nodeAdvertiseIP {
-		t.Errorf("unexpected advertise IP: %s", cluster.Nodes[0].AdvertiseIP)
+	if cluster.Nodes[0].AdvertiseAddress != nodeAdvertiseIP {
+		t.Errorf("unexpected advertise address: %s", cluster.Nodes[0].AdvertiseAddress)
 	}
 }
