@@ -1,6 +1,8 @@
 package types
 
 import (
+	"bytes"
+	"fmt"
 	"time"
 )
 
@@ -39,4 +41,20 @@ type Node struct {
 
 	CreatedAt time.Time `json:"createdAt,omitempty"`
 	UpdatedAt time.Time `json:"updatedAt,omitempty"`
+}
+
+// VersionInfo describes the server's version and runtime info.
+type VersionInfo struct {
+	Name         string `json:"name"`
+	Version      string `json:"version"`
+	APIVersion   string `json:"apiVersion"`
+	BuildDate    string `json:"buildDate"`
+	Experimental bool   `json:"experimental"`
+}
+
+// String returns string representation of version info.
+func (v VersionInfo) String() string {
+	var versionString bytes.Buffer
+	fmt.Fprintf(&versionString, "Discovery %s", v.Version)
+	return versionString.String()
 }
