@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/storageos/discovery/handlers/httperror"
+	"github.com/storageos/discovery/store"
 	"github.com/storageos/discovery/types"
 
 	"github.com/prometheus/client_golang/prometheus"
@@ -30,7 +31,12 @@ func (s *Server) clusterHandler(w http.ResponseWriter, r *http.Request) {
 
 	cluster, err := s.clusterManager.Get(getParam(paramCluster, r))
 	if err != nil {
+		if err == store.ErrNotFound {
+			httperror.Error(w, r, err.Error(), http.StatusNotFound, newCounter)
+			return
+		}
 		httperror.Error(w, r, err.Error(), http.StatusInternalServerError, newCounter)
+		return
 	}
 
 	bts, err := json.Marshal(cluster)
@@ -55,6 +61,11 @@ func (s *Server) registerNodeHandler(w http.ResponseWriter, r *http.Request) {
 
 	updated, err := s.clusterManager.RegisterNode(clusterID, &node)
 	if err != nil {
+		if err == store.ErrNotFound {
+			httperror.Error(w, r, err.Error(), http.StatusNotFound, newCounter)
+			return
+		}
+
 		httperror.Error(w, r, err.Error(), http.StatusInternalServerError, newCounter)
 		return
 	}
