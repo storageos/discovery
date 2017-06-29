@@ -40,7 +40,9 @@ func (s *Server) newClusterHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	cluster, err := s.clusterManager.Create(types.ClusterCreateOps{Size: size})
+	name := r.FormValue("name")
+
+	cluster, err := s.clusterManager.Create(types.ClusterCreateOps{Size: size, Name: name})
 	if err != nil {
 		httperror.Error(w, r, err.Error(), http.StatusInternalServerError, newCounter)
 		return
