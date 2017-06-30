@@ -1,7 +1,9 @@
 package cluster
 
 import (
+	"errors"
 	"fmt"
+	"net/url"
 	"sync"
 	"time"
 
@@ -9,6 +11,13 @@ import (
 	"github.com/storageos/discovery/types"
 	"github.com/storageos/discovery/util/codecs"
 	"github.com/storageos/discovery/util/uuid"
+)
+
+// node registration errors
+var (
+	ErrAddressMissing = errors.New("node address missing")
+	ErrInvalidAddress = errors.New("invalid node address")
+	ErrNameMissing    = errors.New("node name missing")
 )
 
 // Manager - cluster manager
@@ -81,8 +90,30 @@ func (m *DefaultManager) Get(ref string) (*types.Cluster, error) {
 	return &cluster, err
 }
 
+func nodeValid(node *types.Node) error {
+	if node.AdvertiseAddress == "" {
+		return ErrAddressMissing
+	}
+
+	if node.Name == "" {
+		return ErrNameMissing
+	}
+
+	_, err := url.Parse(node.AdvertiseAddress)
+	if err != nil {
+		return ErrInvalidAddress
+	}
+	return nil
+}
+
 // RegisterNode - register new node to the cluster
 func (m *DefaultManager) RegisterNode(clusterID string, node *types.Node) (updated *types.Cluster, err error) {
+
+	err = nodeValid(node)
+	if err != nil {
+		return nil, err
+	}
+
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	cluster, err := m.Get(clusterID)
