@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/storageos/discovery/cluster"
 	"github.com/storageos/discovery/handlers/httperror"
 	"github.com/storageos/discovery/store"
 	"github.com/storageos/discovery/types"
@@ -61,8 +62,12 @@ func (s *Server) registerNodeHandler(w http.ResponseWriter, r *http.Request) {
 
 	updated, err := s.clusterManager.RegisterNode(clusterID, &node)
 	if err != nil {
-		if err == store.ErrNotFound {
+		switch err {
+		case store.ErrNotFound:
 			httperror.Error(w, r, err.Error(), http.StatusNotFound, newCounter)
+			return
+		case cluster.ErrAddressMissing, cluster.ErrInvalidAddress, cluster.ErrAddressMissing:
+			httperror.Error(w, r, err.Error(), http.StatusBadRequest, newCounter)
 			return
 		}
 
