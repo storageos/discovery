@@ -114,3 +114,49 @@ func TestClusterRegisterNodes(t *testing.T) {
 	}
 
 }
+
+func Test_nodeValid(t *testing.T) {
+	type args struct {
+		node *types.Node
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "valid node",
+			args: args{
+				node: &types.Node{
+					AdvertiseAddress: "http://localhost:2333",
+					Name:             "node-1",
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "missing node name",
+			args: args{
+				node: &types.Node{
+					AdvertiseAddress: "http://localhost:2333"},
+			},
+			wantErr: true,
+		},
+		{
+			name: "missing node address",
+			args: args{
+				node: &types.Node{
+					Name: "node-1",
+				},
+			},
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := nodeValid(tt.args.node); (err != nil) != tt.wantErr {
+				t.Errorf("nodeValid() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
