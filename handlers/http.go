@@ -10,7 +10,9 @@ import (
 
 	gorillaHandlers "github.com/gorilla/handlers"
 
-	"github.com/prometheus/client_golang/prometheus"
+	// "github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+
 	"github.com/storageos/discovery/cluster"
 
 	"github.com/gorilla/mux"
@@ -76,10 +78,11 @@ func (s *Server) registerHandlers() {
 	r.HandleFunc("/clusters/{ref}", s.registerNodeHandler).Methods("PUT")
 	r.HandleFunc("/clusters/{ref}", s.deleteClusterHandler).Methods("DELETE")
 
+	r.Handle("/metrics", promhttp.Handler())
+
 	logH := gorillaHandlers.LoggingHandler(os.Stdout, r)
 
 	http.Handle("/", logH)
-	http.Handle("/metrics", prometheus.Handler())
 
 	s.mux = r
 }

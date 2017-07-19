@@ -18,4 +18,4 @@ items:
       app: discovery
     sessionAffinity: None
     type: LoadBalancer
-    loadBalancerIP: 35.189.229.48
+    loadBalancerIP: 35.189.234.67

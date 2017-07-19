@@ -6,7 +6,7 @@ metadata:
   namespace: default
   labels: 
       name: "discovery"
-      keel.observer/policy: all
+      keel.sh/policy: all
 spec:
   replicas: 1
   template:
@@ -25,6 +25,8 @@ spec:
           env:                         
             - name: PORT
               value: "80"  
+            - name: DATABASE_PATH
+              value: /db  
           livenessProbe:
             httpGet:
               path: /health
