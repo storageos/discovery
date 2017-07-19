@@ -10,4 +10,4 @@ test:
 	go test -v `go list ./... | egrep -v /vendor/`
 
 release:
-	CGO_ENABLED=0 GOOS=linux go build -a -tags netgo  -ldflags "$(LDFLAGS)" -o discovery .
+	CGO_ENABLED=0 GOOS=linux go build -a -tags netgo  -ldflags "$(LDFLAGS)" -o discovery .	
