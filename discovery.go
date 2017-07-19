@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"path/filepath"
 	"strconv"
 
 	"github.com/storageos/discovery/cluster"
@@ -17,6 +18,9 @@ const DefaultPort = 8081
 // EnvPort - port to run application on
 const EnvPort = "PORT"
 
+// EnvDatabasePath - database path
+const EnvDatabasePath = "DATABASE_PATH"
+
 func main() {
 	port := DefaultPort
 	if os.Getenv(EnvPort) != "" {
@@ -27,7 +31,12 @@ func main() {
 		port = p
 	}
 
-	db, err := boltdb.New("discovery.db")
+	path := "discovery.db"
+	if os.Getenv(EnvDatabasePath) != "" {		
+		path = filepath.Join(os.Getenv(EnvDatabasePath), "discovery.db")
+	}
+
+	db, err := boltdb.New(path)
 	if err != nil {
 		log.Fatalf("failed to init database: %s", err)
 	}
