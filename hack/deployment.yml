@@ -27,12 +27,14 @@ spec:
               value: "80"  
             - name: DATABASE_PATH
               value: /db  
-          livenessProbe:
+          readinessProbe:
             httpGet:
               path: /health
               port: 80
-            initialDelaySeconds: 30
+            periodSeconds: 5
             timeoutSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
           volumeMounts:          
           - name: cluster-db
             mountPath: /db
