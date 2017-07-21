@@ -17,5 +17,4 @@ items:
     selector:
       app: discovery
     sessionAffinity: None
-    type: LoadBalancer
-    loadBalancerIP: 35.189.234.67
+    type: NodePort

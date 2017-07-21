@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata: 
+  name: discovery-ingress
+  namespace: default
+  annotations:
+      kubernetes.io/ingress.global-static-ip-name: content-balancer
+spec:
+  rules:
+  - host: discovery.storageos.cloud
+    http:
+      paths:
+      - backend: 
+          serviceName: discovery
+          servicePort: 80
