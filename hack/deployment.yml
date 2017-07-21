@@ -16,7 +16,7 @@ spec:
         app: discovery
     spec:
       containers:                    
-        - image: gcr.io/storageos-public-service/discovery:0.1.4
+        - image: gcr.io/storageos-public-service/discovery:0.1.14
           imagePullPolicy: Always 
           name: discovery
           command: ["/bin/discovery"]
