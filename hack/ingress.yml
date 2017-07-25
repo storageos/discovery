@@ -4,12 +4,22 @@ metadata:
   name: discovery-ingress
   namespace: default
   annotations:
-      kubernetes.io/ingress.global-static-ip-name: content-balancer
+    # specify your ingress controller class (i.e. nginx, gce, other) 
+    kubernetes.io/ingress.class: nginx
+    ## if using tls
+    # kubernetes.io/tls-acme: "true"
 spec:
   rules:
+    # we match our discovery host like this
   - host: discovery.storageos.cloud
     http:
       paths:
       - backend: 
           serviceName: discovery
           servicePort: 80
+        path: /*
+## setup tls
+#  tls:
+#  - hosts:
+#    - sub.site.tld
+#    secretName: somesecret

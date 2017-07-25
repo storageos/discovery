@@ -10,7 +10,7 @@ Creates new cluster:
 
 ```
 curl --request POST \
-  --url http://discovery.storageos.cloud/clusters
+  --url https://discovery.storageos.cloud/clusters
 ```
 
 Response:
@@ -33,7 +33,7 @@ Get cluster status (expected size, creation date and registered member info):
 
 ```
 curl --request GET \
-  --url http://discovery.storageos.cloud/clusters/8976384d-08c3-4c3a-b3a9-5e3a6def7062
+  --url https://discovery.storageos.cloud/clusters/8976384d-08c3-4c3a-b3a9-5e3a6def7062
 ```
 
 Response:
@@ -62,7 +62,7 @@ StorageOS is using this API for node registration but in some cases it can be us
 
 ```
 curl --request PUT \
-  --url http://discovery.storageos.cloud/clusters/8976384d-08c3-4c3a-b3a9-5e3a6def7062 \
+  --url https://discovery.storageos.cloud/clusters/8976384d-08c3-4c3a-b3a9-5e3a6def7062 \
   --header 'content-type: application/json' \
   --data '{\n	"id": "node-id",\n	"name":"storageos-1",\n	"advertiseAddress": "http://1.1.1.1:2380"\n}'
 ```
@@ -87,8 +87,14 @@ Then, use supplied `hack/deployment.yml` file to create a deployment:
 
     kubectl create -f hack/deployment.yml
 
-To make it reachable, create a service:
+Create a service to expose it internally on a NodePort: 
 
     kubectl create -f hack/svc.yml    
+
+Expose through an ingress (the ingress resource provided is a partial example, you'll have to configure it how you require):
+
+    kubectl create -f hack/ingress.yml 
+
+
 
 
