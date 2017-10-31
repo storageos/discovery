@@ -10,7 +10,6 @@ import (
 
 	gorillaHandlers "github.com/gorilla/handlers"
 
-	// "github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	"github.com/storageos/discovery/cluster"
@@ -18,6 +17,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// Server - main discovery service server container
 type Server struct {
 	clusterManager cluster.Manager
 	port           int
@@ -25,6 +25,7 @@ type Server struct {
 	mux            *mux.Router
 }
 
+// NewServer - new discovery http server
 func NewServer(port int, cm cluster.Manager) *Server {
 	srv := &Server{
 		clusterManager: cm,
@@ -36,6 +37,7 @@ func NewServer(port int, cm cluster.Manager) *Server {
 	return srv
 }
 
+// Start - configures and starts HTTP server
 func (s *Server) Start() error {
 
 	s.server = &http.Server{
@@ -47,9 +49,13 @@ func (s *Server) Start() error {
 		WriteTimeout:      time.Second * 25,
 	}
 	log.Printf("server starting on port %d", s.port)
+
+	s.server.Handler = gorillaHandlers.LoggingHandler(os.Stdout, s.mux)
+
 	return s.server.ListenAndServe()
 }
 
+// Stop - stops HTTP server
 func (s *Server) Stop() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(5))
 	defer cancel()
