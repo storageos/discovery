@@ -71,10 +71,10 @@ func (s *Server) registerNodeHandler(w http.ResponseWriter, r *http.Request) {
 			httperror.Error(w, r, err.Error(), http.StatusBadRequest, newCounter)
 			return
 		case cluster.ErrNodeNamePresent:
-			httperror.Error(w, r, err.Error()+fmt.Sprintf(": name %s exists in cluster %s", node.Name, clusterID), http.StatusConflict, newCounter)
+			httperror.Error(w, r, err.Error()+fmt.Sprintf(": name %s exists in cluster %s", node.Name, clusterID), http.StatusUnprocessableEntity, newCounter)
 			return
 		case cluster.ErrNodeAddressPresent:
-			httperror.Error(w, r, err.Error()+fmt.Sprintf(": address %s exists in cluster %s", node.AdvertiseAddress, clusterID), http.StatusConflict, newCounter)
+			httperror.Error(w, r, err.Error()+fmt.Sprintf(": address %s exists in cluster %s", node.AdvertiseAddress, clusterID), http.StatusUnprocessableEntity, newCounter)
 			return
 		}
 

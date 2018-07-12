@@ -60,7 +60,7 @@ func TestRegisterNodeHandler(t *testing.T) {
 			name:      "name already present - node 4",
 			clusterID: c.ID,
 			node:      types.Node{ID: "5", Name: "node4", AdvertiseAddress: "192.168.0.5", CreatedAt: time.Now(), UpdatedAt: time.Now()},
-			code:      http.StatusConflict,
+			code:      http.StatusUnprocessableEntity,
 			errMsg: fmt.Sprintf(
 				"%s: name node4 exists in cluster %s\n",
 				cluster.ErrNodeNamePresent,
@@ -71,7 +71,7 @@ func TestRegisterNodeHandler(t *testing.T) {
 			name:      "address already present - 192.168.0.4",
 			clusterID: c.ID,
 			node:      types.Node{ID: "6", Name: "node6", AdvertiseAddress: "192.168.0.4", CreatedAt: time.Now(), UpdatedAt: time.Now()},
-			code:      http.StatusConflict,
+			code:      http.StatusUnprocessableEntity,
 			errMsg: fmt.Sprintf(
 				"%s: address 192.168.0.4 exists in cluster %s\n",
 				cluster.ErrNodeAddressPresent,
