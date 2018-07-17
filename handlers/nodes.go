@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -66,8 +67,14 @@ func (s *Server) registerNodeHandler(w http.ResponseWriter, r *http.Request) {
 		case store.ErrNotFound:
 			httperror.Error(w, r, err.Error(), http.StatusNotFound, newCounter)
 			return
-		case cluster.ErrAddressMissing, cluster.ErrInvalidAddress, cluster.ErrAddressMissing:
+		case cluster.ErrAddressMissing, cluster.ErrInvalidAddress, cluster.ErrNameMissing:
 			httperror.Error(w, r, err.Error(), http.StatusBadRequest, newCounter)
+			return
+		case cluster.ErrNodeNamePresent:
+			httperror.Error(w, r, err.Error()+fmt.Sprintf(": name %s exists in cluster %s", node.Name, clusterID), http.StatusUnprocessableEntity, newCounter)
+			return
+		case cluster.ErrNodeAddressPresent:
+			httperror.Error(w, r, err.Error()+fmt.Sprintf(": address %s exists in cluster %s", node.AdvertiseAddress, clusterID), http.StatusUnprocessableEntity, newCounter)
 			return
 		}
 

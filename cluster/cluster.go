@@ -2,7 +2,6 @@ package cluster
 
 import (
 	"errors"
-	"fmt"
 	"net/url"
 	"sync"
 	"time"
@@ -15,9 +14,11 @@ import (
 
 // node registration errors
 var (
-	ErrAddressMissing = errors.New("node address missing")
-	ErrInvalidAddress = errors.New("invalid node address")
-	ErrNameMissing    = errors.New("node name missing")
+	ErrAddressMissing     = errors.New("node address missing")
+	ErrInvalidAddress     = errors.New("invalid node address")
+	ErrNameMissing        = errors.New("node name missing")
+	ErrNodeNamePresent    = errors.New("node name already present")
+	ErrNodeAddressPresent = errors.New("node address already present")
 )
 
 // Manager - cluster manager
@@ -129,11 +130,11 @@ func (m *DefaultManager) RegisterNode(clusterID string, node *types.Node) (updat
 		}
 
 		if n.Name == node.Name {
-			return nil, fmt.Errorf("node with name %s already exists in cluster %s", node.Name, clusterID)
+			return nil, ErrNodeNamePresent
 		}
 
 		if n.AdvertiseAddress == node.AdvertiseAddress {
-			return nil, fmt.Errorf("node with advertise addressP %s already exists in cluster %s", node.AdvertiseAddress, clusterID)
+			return nil, ErrNodeAddressPresent
 		}
 	}
 
